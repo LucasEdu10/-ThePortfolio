@@ -1,25 +1,25 @@
 package com.br.theportfolio.service;
 
-import com.br.theportfolio.model.Experience;
-import com.br.theportfolio.repository.ExperienceRepository;
+import com.br.theportfolio.model.Biography;
+import com.br.theportfolio.repository.BiographyRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
-public class ExperienceService {
+public class BiographyService {
 
-    private final ExperienceRepository repository;
+    private final BiographyRepository repository;
 
-    public ExperienceService(ExperienceRepository repository) {
+    public BiographyService(BiographyRepository repository) {
         this.repository = repository;
     }
 
-    public Experience save(Experience experience) {
-        return repository.save(experience);
+    public Biography save(Biography biography) {
+        return repository.save(biography);
     }
 
-    public List<Experience> getExperience() {
-        return repository.findAll();
+    public Optional<Biography> getBio(Long id) {
+        return repository.findById(id);
     }
 }

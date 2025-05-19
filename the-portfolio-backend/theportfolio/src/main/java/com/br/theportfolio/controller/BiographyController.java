@@ -1,12 +1,15 @@
 package com.br.theportfolio.controller;
 
 import com.br.theportfolio.auth.AuthFacade;
+import com.br.theportfolio.model.Biography;
 import com.br.theportfolio.model.Experience;
+import com.br.theportfolio.service.BiographyService;
 import com.br.theportfolio.service.ExperienceService;
 import com.br.theportfolio.utils.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -14,21 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/experiencias")
-public class ExperienceController {
+@RequestMapping("/api/biografia")
+public class BiographyController {
 
-    private final ExperienceService service;
+    private final BiographyService service;
     private final AuthFacade auth;
-    private final JwtUtil jwtUtil;
 
-    public ExperienceController(ExperienceService service, AuthFacade auth, JwtUtil jwtUtil) {
+    public BiographyController(BiographyService service, AuthFacade auth) {
         this.service = service;
         this.auth = auth;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping
-    public ResponseEntity<?> createExperience(@RequestBody Experience experience,
+    public ResponseEntity<?> createBio(@RequestBody Biography biography,
                                               @RequestHeader("Authorization") String authorizationHeader) {
 
         // delega a validação ao AuthFacade
@@ -38,14 +39,12 @@ public class ExperienceController {
                     .body("Token inválido ou ausente");
         }
 
-        experience.setDescricao(
-                experience.getDescricao() + " (criado por " + username + ")"
-        );
-        return ResponseEntity.ok(service.save(experience));
+        return ResponseEntity.ok(service.save(biography));
     }
 
-    @GetMapping
-    public ResponseEntity<?> getExperience(@RequestHeader("Authorization") String authorizationHeader) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getBio(@RequestHeader("Authorization") String authorizationHeader,
+                                    @PathVariable("id") Long id) {
         try {
             // delega a validação ao AuthFacade
             String username = auth.getUsernameIfValid(authorizationHeader);
@@ -54,7 +53,7 @@ public class ExperienceController {
                         .body("Token inválido ou ausente");
             }
 
-            var xp = service.getExperience();
+            var xp = service.getBio(id);
             return ResponseEntity.ok(xp);
         } catch (Exception ex) {
             /* 4. Qualquer exceção inesperada */

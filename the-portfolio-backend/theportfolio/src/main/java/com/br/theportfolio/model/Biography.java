@@ -12,14 +12,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Experience {
+public class Biography {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String titulo;
-    private String empresa;
-    private String descricao;
-    private String periodo;
+    private String description;
 }
